@@ -1,0 +1,58 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        <div class="content">
+            <p>всё будет хорошо.</p>
+            <p>всё будет онлайн.</p>
+            <p class="time"></p>
+        </div>
+    </body>
+    <style>
+        @font-face {
+            font-family: 'PTRootUIWebBold';
+            src: url('fonts/PT%20Root%20UI_Bold.eot');
+            src:
+                url('fonts/PT%20Root%20UI_Bold.eot?#iefix') format('embedded-opentype'),
+                url('fonts/PT%20Root%20UI_Bold.woff2') format('woff2'),
+                url('fonts/PT%20Root%20UI_Bold.woff') format('woff'),
+                url('fonts/PT%20Root%20UI_Bold.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            background: #000000;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            font-family: 'PTRootUIWebBold';
+        }
+
+        .content {
+            font-size: 36px;
+            letter-spacing: 10px;
+            text-align: center;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+    </style>
+    <script>
+        const nullify = d => d < 10 ? `0${d}` : d;
+
+        function updateTime() {
+            const dateNow = new Date();
+            const time = `${nullify(dateNow.getHours())}:${nullify(dateNow.getMinutes())}:${nullify(dateNow.getSeconds())}`;
+            document.querySelector(".time").innerHTML = time;
+        }
+        
+        setInterval(updateTime, 1000);
+        updateTime();
+    </script>
+</html>
