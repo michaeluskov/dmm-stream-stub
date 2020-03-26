@@ -1,0 +1,105 @@
+<html>
+    <head>
+        <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+    </head>
+    <body>
+        <!--<div class="ready">
+            <p><img src="logo.png" class="logo"></p>
+            <p>запустить стрим</p>
+        </div>-->
+        <div class="container" id="container"></div>    
+    </body>
+
+    <style>
+        @font-face {
+            font-family: 'PTRootUIWebBold';
+            src: url('fonts/PT%20Root%20UI_Bold.eot');
+            src:
+                url('fonts/PT%20Root%20UI_Bold.eot?#iefix') format('embedded-opentype'),
+                url('fonts/PT%20Root%20UI_Bold.woff2') format('woff2'),
+                url('fonts/PT%20Root%20UI_Bold.woff') format('woff'),
+                url('fonts/PT%20Root%20UI_Bold.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body, html {
+            background: black;
+            padding: 0;
+            margin: 0;
+            position: relative;
+            font-family: 'PTRootUIWebBold';
+        }
+
+        .container {
+            width: 100vw;
+            height: 100vh;
+            z-index: 10000;
+        }
+
+        .ready {
+            width: 100vw;
+            height: 100vh;
+            background: black;
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            letter-spacing: 10px;
+            text-align: center;
+            display: none;
+        }
+
+        .logo {
+            width: 150px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+    </style>
+    <script src= "https://player.twitch.tv/js/embed/v1.js"></script>
+    <script type="text/javascript">
+        window.onmessage = function (e) {
+            var data = JSON.parse(e.data);
+
+        };
+        var options = {
+            width: window.innerWidth,
+            height: window.innerHeight,
+            channel: document.location.hash || "michaeluskov",
+            playsinline: true,
+            parent: ["michaeluskov.github.io", "localhost"]
+        };
+        var player = new Twitch.Player("container", options);
+        player.addEventListener(Twitch.Player.READY, function () {
+            console.log("Ready");
+            player.play();
+            player.setVolume(0);
+            player.showPlayerControls(false);
+            player.addEventListener(Twitch.Player.PLAYING, function () {
+                console.log("PLAYING");
+                window.postMessage("started_playing");
+                var isMutedInterval = setInterval(function () {
+                    var isMuted = player.isPaused();
+                    if (!isMuted) {
+                        clearInterval(isMutedInterval);
+                        window.postMessage("screen_unlocked");
+                        //var ready = document.querySelector(".ready");
+                        //ready.parentElement.removeChild(ready);
+                        //document.querySelector(".container").style.opacity = 1;
+                        player.setVolume(1);
+                        player.setMuted(false);
+                        player.showPlayerControls(false);
+                        player.setLiveLowLatencyEnabled(true);
+                    }
+                }, 3000);
+            })
+        })
+    </script>
+</html>
